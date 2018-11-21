@@ -14,7 +14,7 @@ connection.connect( function(err) {
         throw err;
     }
     else
-    console.log("funkar");
+    console.log("Sassa massa");
 });
 
 router.get('/', (req, res, next) => {
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
         res.status(200).json({
             message: 'Get',
             result:results});
-        console.log('The solution is: ', results[0].Name);
+        console.log('The solution is: ', results[0].LampName);
       });
        
    
@@ -174,6 +174,5 @@ router.delete('/:productName', (req, res, next) => {
 });
 
 });
-
-module.exports = router;
 */
+module.exports = router;
