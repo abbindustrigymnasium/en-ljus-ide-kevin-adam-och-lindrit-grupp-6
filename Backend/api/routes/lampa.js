@@ -101,7 +101,35 @@ router.patch('/:LampName', (req, res, next) => {
                 error: error
             });
         });
-
 });
 
+
+router.post('', (req, res, next) => {
+    const Lamp = {
+        Name: req.body.Name,
+    }
+
+    var CreatedLamp= function(){
+        return new Promise(function(resolve,reject){
+
+            con.query('INSERT INTO lamapen (LampName) VALUES ?',[Lamp.Name], function (error, results) {
+                if (error)
+                return reject (error);
+                else
+                return resolve(NewLamp)         
+              });
+        })
+    }
+
+CreatedLamp().then( NewLamp => {
+    res.status(201).json({
+        message:"Success, new lamap",
+        NewLamp: NewLamp
+    })
+} ).catch(error => {
+    res.status(500).json({
+        error: error
+    })
+});
+});
 module.exports = router;
