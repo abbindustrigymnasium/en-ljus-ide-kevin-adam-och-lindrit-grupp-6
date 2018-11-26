@@ -106,17 +106,23 @@ router.patch('/:LampName', (req, res, next) => {
 
 router.post('', (req, res, next) => {
     const Lamp = {
-        Name: req.body.Name
+        LampName: req.body.Name,
+        LightStrengthWarm: req.body.Warm,
+        LightStrengthCold: req.body.Cold,
+        LEDSwitch: req.body.LED
     }
+
 
     var CreatedLamp= function(){
         return new Promise(function(resolve,reject){
 
-            con.query('INSERT INTO lamapen (LampName) VALUES ?',[Lamp.Name], function (error, results) {
+            var LampValues= [Lamp.LampName, Lamp.LightStrengthWarm, Lamp.LightStrengthCold, Lamp.LEDSwitch];
+
+            con.query('INSERT INTO lamapen (LampName, LampStrengthWarm, LampStrengthCold, LEDSwitch) VALUES ?',[[LampValues]], function (error, results) {
                 if (error)
                 return reject (error);
                 else
-                return resolve(results)         
+                return resolve(LampValues)         
               });
         })
     }
@@ -124,7 +130,7 @@ router.post('', (req, res, next) => {
 CreatedLamp().then( NewLamp => {
     res.status(201).json({
         message:"Success, new lamap",
-        NewLamp: NewLamp
+        result: NewLamp
     })
 } ).catch(error => {
     res.status(500).json({
@@ -132,4 +138,6 @@ CreatedLamp().then( NewLamp => {
     })
 });
 });
+
+
 module.exports = router;
