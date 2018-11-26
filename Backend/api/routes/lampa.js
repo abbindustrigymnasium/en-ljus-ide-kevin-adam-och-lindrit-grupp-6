@@ -106,7 +106,7 @@ router.patch('/:LampName', (req, res, next) => {
 
 router.post('', (req, res, next) => {
     const Lamp = {
-        Name: req.body.Name,
+        Name: req.body.Name
     }
 
     var CreatedLamp= function(){
@@ -116,7 +116,7 @@ router.post('', (req, res, next) => {
                 if (error)
                 return reject (error);
                 else
-                return resolve(NewLamp)         
+                return resolve(results)         
               });
         })
     }
