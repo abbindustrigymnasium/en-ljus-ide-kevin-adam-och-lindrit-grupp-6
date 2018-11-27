@@ -1,4 +1,5 @@
 #define D7 13
+#define Red 14
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 //inkludera arduinojson
 #include <ArduinoJson.h>
@@ -7,22 +8,24 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-String Lampname="Gunnar";
-int Hardvalue= 0;
-int Strengthvalue= 0;
+String LampName="SLAYER";
+int LampStrengthWarm= 69;
+int LampStrengthCold= 0;
+int LEDSwitch= 0;
 bool LampExist=false;
 bool GottenValues = false;
 
 
 String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)    
 {   
-  String url= "/light/"; //Urlen jag använder för att posta mina värden       
+  String url= "/lampa/"; //Urlen jg använder för att posta mina värden       
   Serial.println("Skickar värde första gången");   
   StaticJsonBuffer<300> jsonBuffer; //Skapar en buffer, det vill säga så mycket minne som vårt blivande jsonobjekt får använda.   
   JsonObject& root = jsonBuffer.createObject(); //Skapar ett jsonobjekt som vi kallar root   
-  root["Name"] = Lampname; //Skapar parameterna name och ger den värdet Lampname   
-  root["Hard"] = Hardvalue;   
-  root["Strength"] = Strengthvalue;// Samma som ovan   
+  root["Name"] = LampName; //Skapar parameterna name och ger den värdet Lampname   
+  root["Warm"] = LampStrengthWarm;   
+  root["Cold"] = LampStrengthCold;// Samma som ovan 
+  root["LED"] = LEDSwitch;  
   String buffer;  //Skapar en string som vi kallar buffer   
   root.printTo(buffer); //Lägger över och konverterar vårt jsonobjekt till en string och sparar det i buffer variabeln.   
   if(LampExist==true)   
@@ -45,7 +48,7 @@ String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)
 
 
 String GetfromDB(String host){ 
-  String url= "/light/"+Lampname; //Urlen jag använder för att posta mina värden   
+  String url= "/lampa/"+LampName; //Urlen jag använder för att posta mina värden   
   // Detta skickar värdena till servern.    
   String Output = "GET "+  url + " HTTP/1.1\r\n" + //Säger att det är typen post, kan vara patch, get,delete beroende på vad man vill göra., samt urlen vi ska till.                  
     "Host: " + host+ "\r\n" + //Berättar vilken host det är vi ansluter till                  
@@ -60,12 +63,14 @@ void UpdateValues(String json){
   //Vi skapar sedan lokala strings där vi lägger över värdena en i taget     
   String dataL = root["Name"];          
   if(dataL!="none")     {     
-    int datah = root["Hard"];     
-    int datas = root["Strength"];     
+    int datah = root["Warm"];     
+    int datas = root["Cold"]; 
+    int datai = root["LED"];    
     //Därefter skriver vi över de lokala värdena till våra globala värden för lampan      
-    Lampname = dataL;       
-    Hardvalue =datah;      
-    Strengthvalue = datas;        
+    //LampName = dataL;       
+    LampStrengthWarm =datah;      
+    LampStrengthCold = datas;
+    LEDSwitch = datai;        
     LampExist=true;          
     } else {           
       String Mess =root["message"];          
@@ -76,16 +81,19 @@ void UpdateValues(String json){
 
 
 void UpdatingLamp() {
-  if(Strengthvalue>50)
+  if(LampStrengthWarm>50){
   digitalWrite(D7,HIGH);
-  else
-  digitalWrite(D7,LOW);
+  digitalWrite(Red,HIGH);
+  } else {
+    digitalWrite(D7,LOW);
+    digitalWrite(Red,LOW);
+    }
 }
 
 
 void setup() {
     pinMode(D7,OUTPUT);
-    
+    pinMode(Red,OUTPUT);
     
     Serial.begin(115200);
 
@@ -114,7 +122,7 @@ void setup() {
 
 void ConnecttoDB(String input){    
   const int httpPort = 1337; //porten vi ska till   
-  const char* host = "192.168.0.135";//Adressen vi ska ansluta til       
+  const char* host = "192.168.0.126";//Adressen vi ska ansluta til       
   Serial.print("connecting to ");  
   Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
   // Use WiFiClient class to create TCP connections   
@@ -143,7 +151,7 @@ while (client.available() == 0) {
     String line = client.readStringUntil('\r'); //Läser varje rad tills det är slut på rader   
     if (!httpBody && line.charAt(1) == '{') { //Om vi hittar { så vet vi att vi har nått bodyn     
       httpBody = true; //boolen blir true för att vi ska veta för nästa rad att vi redan är i bodyn   
-    }   
+    }    
     if (httpBody) { //Om bodyn är sann lägg till raden i json variabeln     
       json += line;   
       } 
@@ -152,7 +160,7 @@ while (client.available() == 0) {
     Serial.println("Got data:");     
     Serial.println(json);   
     if(input =="GET") //Om det är Get så kör vi metoden UpdateValues     
-    UpdateValues(json);   
+      UpdateValues(json);   
     Serial.println();   
     Serial.println("closing connection"); 
     } 
@@ -163,6 +171,7 @@ void loop() {
   
     ConnecttoDB("GET");
     UpdatingLamp();
+    Serial.println(LampStrengthWarm);
     delay(1000);
     // ConnecttoDB("POST");
     //delay(10000);  
