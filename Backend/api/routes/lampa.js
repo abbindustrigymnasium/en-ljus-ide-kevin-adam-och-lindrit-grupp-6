@@ -17,51 +17,51 @@ connection.connect( function(err) {
     console.log("Sassa massa");
 });
 
-router.get('/', (req, res, next) => {
-    connection.query('SELECT * FROM lamapen', function (error, results, fields) {
-        if (error) throw error;
-        res.status(200).json({
-            message: 'Get',
-            result:results});
-        console.log(results[0].LampName);
-      });
-       
-   
-});
+var Values_fromDB;
+var cron = require('node-cron');
+cron.schedule('* * * * * *', () => {
 
-router.get('/:lampName', (req, res, next) => {
-    const Name = req.params.lampName;
-
-
-    var getproduct= function(){
-        return new Promise(function(resolve,reject){
-
-            connection.query('SELECT * FROM lamapen WHERE `LampName` = ?',[Name], function (error, results) {
-                if (error)
-                return reject (error);
-                else
-                return resolve(results)  
-              });
-
-        })
-    } 
-
-    getproduct().then( result => {
-
-        if (result.length!==0) {
-            res.status(200).json(result);  
-        }
-        else
-        res.status(200).json({
-            message: "No such Lamap"
+    var GetLight = function () {
+        return new Promise(function (resolve, reject) {
+            con.query("SELECT * FROM lamapen", function (err,result) {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(result);
+                }
+            });
         });
-
-} ).catch(error => {
-    res.status(500).json({
-        error: error
+    }
+    GetLight().then(response => {
+        Values_fromDB= response;
+        //console.log(Values_fromDB);
     })
-});
+}, null, true, 'America/Los_Angeles');
 
+
+router.get('', (req, res) => {
+    res.status(200).json(Values_fromDB);
+        console.log(Values_fromDB);
+    });
+
+router.get('/:lampName', (req, res) => {
+    var found=false;
+    var OutputValue;
+    Values_fromDB.forEach(element => {
+        if (element.Name== req.params.lampName) {
+            found=true;
+            OutputValue =element;
+        }
+    });
+    if (found!= true) {
+        res.status(200).json({name: "none",
+    message: "ne de finns inga lampor"});
+    }
+    else
+    {
+        res.status(200).json(OutputValue);
+        console.log(OutputValue);
+    }
 });
 
 
