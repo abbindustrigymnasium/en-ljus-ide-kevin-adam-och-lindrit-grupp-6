@@ -14,7 +14,7 @@ connection.connect( function(err) {
         throw err;
     }
     else
-    console.log("");
+    console.log("Sassa Massa");
 });
 
 router.get('/', (req, res, next) => {

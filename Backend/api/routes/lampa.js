@@ -13,8 +13,6 @@ connection.connect( function(err) {
     if (err) {
         throw err;
     }
-    else
-    console.log("Sassa massa");
 });
 
 var Values_fromDB;
@@ -23,9 +21,9 @@ cron.schedule('* * * * * *', () => {
 
     var GetLight = function () {
         return new Promise(function (resolve, reject) {
-            con.query("SELECT * FROM lamapen", function (err,result) {
+            connection.query("SELECT * FROM lamapen", function (error,result) {
                 if (err) {
-                    return reject(err);
+                    return reject(error);
                 } else {
                     return resolve(result);
                 }
@@ -34,7 +32,7 @@ cron.schedule('* * * * * *', () => {
     }
     GetLight().then(response => {
         Values_fromDB= response;
-        //console.log(Values_fromDB);
+        console.log(Values_fromDB);
     })
 }, null, true, 'America/Los_Angeles');
 
