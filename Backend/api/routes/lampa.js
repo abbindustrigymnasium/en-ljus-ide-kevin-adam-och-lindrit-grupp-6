@@ -105,27 +105,27 @@ router.patch('/:LampName', (req, res, next) => {
 
 
 router.post('', (req, res, next) => {
-    const Lamp = {
-        LampName: req.body.Name,
-        LightStrengthWarm: req.body.Warm,
-        LightStrengthCold: req.body.Cold,
-        LEDSwitch: req.body.LED
-    }
 
+    const Lamp = {
+        Name: req.body.Name,
+        Warm: req.body.Warm,
+        Cold: req.body.Cold,
+        LED: req.body.LED
+    }
 
     var CreatedLamp= function(){
         return new Promise(function(resolve,reject){
 
-            var LampValues= [Lamp.LampName, Lamp.LightStrengthWarm, Lamp.LightStrengthCold, Lamp.LEDSwitch];
+            var LampValues = [Lamp.Name, Lamp.Warm, Lamp.Cold, Lamp.LED]
 
-            con.query('INSERT INTO lamapen (LampName, LampStrengthWarm, LampStrengthCold, LEDSwitch) VALUES ?',[[LampValues]], function (error, results) {
+            connection.query('INSERT INTO `lamapen` (`LampName`, `LampStrengthWarm`, `LampStrengthCold`, `LEDSwitch`) VALUES ?',[[LampValues]], function (error, results, fields) {
                 if (error)
-                return reject (error);
+                return reject(error);
                 else
-                return resolve(LampValues)         
+                return resolve(results)  
               });
-        })
-    }
+        });
+    } 
 
 CreatedLamp().then( NewLamp => {
     res.status(201).json({
@@ -140,6 +140,35 @@ CreatedLamp().then( NewLamp => {
 });
 
 
+router.delete('/:LampName', (req, res, next) => {
 
+    var DeleteLamp= function(){
+        return new Promise(function(resolve,reject){
+
+            connection.query('DELETE FROM lamapen WHERE `LampName` = ?',[req.params.LampName], function (error, results, fields) {
+                if (error)
+                return reject(error);
+                else
+                return resolve(results)  
+              });
+        });
+    } 
+
+    DeleteLamp().then( result => {
+
+       if (result.affectedRows>=1) {
+            res.status(200).json(result);
+            
+        }
+        else
+        res.status(200).json({
+            message: "You better not delete the slayer lamp,"
+        } );
+    }).catch(error => {
+            res.status(500).json({
+                error: error
+            });
+        });
+});
 
 module.exports = router;
