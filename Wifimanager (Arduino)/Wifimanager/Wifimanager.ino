@@ -1,5 +1,4 @@
 #define D7 13
-#define Red 14
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 //inkludera arduinojson
 #include <ArduinoJson.h>
@@ -9,7 +8,7 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 String LampName="SLAYER";
-int LampStrengthWarm= 69;
+int LampStrengthWarm= 0;
 int LampStrengthCold= 0;
 int LEDSwitch= 0;
 bool LampExist=false;
@@ -18,14 +17,14 @@ bool GottenValues = false;
 
 String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)    
 {   
-  String url= "/lampa/"; //Urlen jg använder för att posta mina värden       
+  String url= "/lampa/"; //Urlen jag använder för att posta mina värden       
   Serial.println("Skickar värde första gången");   
   StaticJsonBuffer<300> jsonBuffer; //Skapar en buffer, det vill säga så mycket minne som vårt blivande jsonobjekt får använda.   
   JsonObject& root = jsonBuffer.createObject(); //Skapar ett jsonobjekt som vi kallar root   
   root["Name"] = LampName; //Skapar parameterna name och ger den värdet Lampname   
   root["Warm"] = LampStrengthWarm;   
-  root["Cold"] = LampStrengthCold;// Samma som ovan 
-  root["LED"] = LEDSwitch;  
+  root["Cold"] = LampStrengthCold;
+  root["LED"] = LEDSwitch;// Samma som ovan   
   String buffer;  //Skapar en string som vi kallar buffer   
   root.printTo(buffer); //Lägger över och konverterar vårt jsonobjekt till en string och sparar det i buffer variabeln.   
   if(LampExist==true)   
@@ -61,17 +60,23 @@ void UpdateValues(String json){
   StaticJsonBuffer<400> jsonBuffer;     
   JsonObject& root = jsonBuffer.parseObject(json);     
   //Vi skapar sedan lokala strings där vi lägger över värdena en i taget     
-  String dataL = root["Name"];          
-  if(dataL!="none")     {     
-    int datah = root["Warm"];     
-    int datas = root["Cold"]; 
-    int datai = root["LED"];    
+  String dataN = root["Name"]; 
+  Serial.println(LampStrengthWarm);
+  Serial.println(LampStrengthCold);
+  Serial.println(LEDSwitch);         
+  if(dataN!="none")     {     
+    int dataW = root["Warm"];     
+    int dataC = root["Cold"];
+    int dataL = root["LED"];     
     //Därefter skriver vi över de lokala värdena till våra globala värden för lampan      
     //LampName = dataL;       
-    LampStrengthWarm =datah;      
-    LampStrengthCold = datas;
-    LEDSwitch = datai;        
-    LampExist=true;          
+    LampStrengthWarm =dataW;      
+    LampStrengthCold = dataC;  
+    LEDSwitch = dataL;      
+    LampExist=true;
+    Serial.println(LampStrengthWarm);
+    Serial.println(LampStrengthCold);
+    Serial.println(LEDSwitch);          
     } else {           
       String Mess =root["message"];          
       Serial.print(Mess);          
@@ -81,19 +86,16 @@ void UpdateValues(String json){
 
 
 void UpdatingLamp() {
-  if(LampStrengthWarm>50){
+  if(LampStrengthWarm>50)
   digitalWrite(D7,HIGH);
-  digitalWrite(Red,HIGH);
-  } else {
-    digitalWrite(D7,LOW);
-    digitalWrite(Red,LOW);
-    }
+  else
+  digitalWrite(D7,LOW);
 }
 
 
 void setup() {
     pinMode(D7,OUTPUT);
-    pinMode(Red,OUTPUT);
+    
     
     Serial.begin(115200);
 
@@ -151,7 +153,7 @@ while (client.available() == 0) {
     String line = client.readStringUntil('\r'); //Läser varje rad tills det är slut på rader   
     if (!httpBody && line.charAt(1) == '{') { //Om vi hittar { så vet vi att vi har nått bodyn     
       httpBody = true; //boolen blir true för att vi ska veta för nästa rad att vi redan är i bodyn   
-    }    
+    }   
     if (httpBody) { //Om bodyn är sann lägg till raden i json variabeln     
       json += line;   
       } 
@@ -160,7 +162,7 @@ while (client.available() == 0) {
     Serial.println("Got data:");     
     Serial.println(json);   
     if(input =="GET") //Om det är Get så kör vi metoden UpdateValues     
-      UpdateValues(json);   
+    UpdateValues(json);   
     Serial.println();   
     Serial.println("closing connection"); 
     } 
@@ -171,7 +173,10 @@ void loop() {
   
     ConnecttoDB("GET");
     UpdatingLamp();
+    Serial.println(LampName);
     Serial.println(LampStrengthWarm);
+    Serial.println(LampStrengthCold);
+    Serial.println(LEDSwitch);
     delay(1000);
     // ConnecttoDB("POST");
     //delay(10000);  
