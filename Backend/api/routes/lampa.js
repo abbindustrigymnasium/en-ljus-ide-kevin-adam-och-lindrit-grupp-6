@@ -21,9 +21,9 @@ cron.schedule('* * * * * *', () => {
 
     var GetLight = function () {
         return new Promise(function (resolve, reject) {
-            connection.query("SELECT * FROM lamapen", function (error,result) {
+            connection.query("SELECT * FROM lamapen", function (err,result) {
                 if (err) {
-                    return reject(error);
+                    return reject(err);
                 } else {
                     return resolve(result);
                 }
@@ -32,7 +32,7 @@ cron.schedule('* * * * * *', () => {
     }
     GetLight().then(response => {
         Values_fromDB= response;
-        console.log(Values_fromDB);
+        //console.log(Values_fromDB);
     })
 }, null, true, 'America/Los_Angeles');
 
@@ -46,7 +46,7 @@ router.get('/:lampName', (req, res) => {
     var found=false;
     var OutputValue;
     Values_fromDB.forEach(element => {
-        if (element.Name== req.params.lampName) {
+        if (element.LampName== req.params.lampName) {
             found=true;
             OutputValue =element;
         }
