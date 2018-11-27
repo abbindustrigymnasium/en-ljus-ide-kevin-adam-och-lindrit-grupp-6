@@ -14,7 +14,7 @@ connection.connect( function(err) {
         throw err;
     }
     else
-    console.log("Sassa massa");
+    console.log("");
 });
 
 router.get('/', (req, res, next) => {
@@ -29,13 +29,13 @@ router.get('/', (req, res, next) => {
    
 });
 
-/*router.post('/', (req, res, next) => {
+router.post('/', (req, res, next) => {
     const product = {
         Name: req.body.Name,
         Price: req.body.Price
     }
 
-    var Createdproduct= function(){
+    var CreatedLamp= function(){
         return new Promise(function(resolve,reject){
 
             var Theproduct= [product.Name,product.Price];
@@ -52,7 +52,7 @@ router.get('/', (req, res, next) => {
         })
     } 
 
-Createdproduct().then( Theproduct => {
+CreatedLamp().then( Theproduct => {
 
     res.status(201).json({
         message:"Success, new Price",
@@ -67,7 +67,7 @@ Createdproduct().then( Theproduct => {
 
 });
 
-router.get('/:productName', (req, res, next) => {
+/*router.get('/:productName', (req, res, next) => {
     const Name = req.params.productName;
 
 
