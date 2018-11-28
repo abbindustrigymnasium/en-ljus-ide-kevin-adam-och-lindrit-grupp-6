@@ -60,23 +60,17 @@ void UpdateValues(String json){
   StaticJsonBuffer<400> jsonBuffer;     
   JsonObject& root = jsonBuffer.parseObject(json);     
   //Vi skapar sedan lokala strings där vi lägger över värdena en i taget     
-  String dataN = root["Name"]; 
-  Serial.println(LampStrengthWarm);
-  Serial.println(LampStrengthCold);
-  Serial.println(LEDSwitch);         
+  String dataN = root["LampName"];         
   if(dataN!="none")     {     
-    int dataW = root["Warm"];     
-    int dataC = root["Cold"];
-    int dataL = root["LED"];     
+    int dataW = root["LampStrengthWarm"];     
+    int dataC = root["LampStrengthCold"];
+    int dataL = root["LEDSwitch"];     
     //Därefter skriver vi över de lokala värdena till våra globala värden för lampan      
     //LampName = dataL;       
     LampStrengthWarm =dataW;      
     LampStrengthCold = dataC;  
     LEDSwitch = dataL;      
-    LampExist=true;
-    Serial.println(LampStrengthWarm);
-    Serial.println(LampStrengthCold);
-    Serial.println(LEDSwitch);          
+    LampExist=true;      
     } else {           
       String Mess =root["message"];          
       Serial.print(Mess);          

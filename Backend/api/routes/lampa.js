@@ -12,7 +12,8 @@ var connection = mysql.createConnection({
 connection.connect( function(err) {
     if (err) {
         throw err;
-    }
+    } else
+    console.log("Sassa Massa");
 });
 
 var Values_fromDB;
