@@ -8,6 +8,7 @@ var connection = mysql.createConnection({
   password : 'renbullar',
   database : 'ljuside6'
 });
+// Vi skapar en variabel som inehåller allt som behövs för att ansluta till våra databas
  
 connection.connect( function(err) {
     if (err) {
@@ -15,6 +16,7 @@ connection.connect( function(err) {
     } else
     console.log("Sassa Massa");
 });
+// Vi testar om vi kan koppla upp. Om det går kommer den skriva ut Sassa Massa
 
 var Values_fromDB;
 var cron = require('node-cron');
@@ -25,7 +27,7 @@ cron.schedule('* * * * * *', () => {
 
     var GetLight = function () {
         return new Promise(function (resolve, reject) {
-            connection.query("SELECT * FROM lamapen", function (err,result) {
+            connection.query("SELECT * FROM lamapen", function (err,result) { 
                 if (err) {
                     return reject(err);
                 } else {
@@ -48,12 +50,15 @@ router.get('', (req, res) => {
     });
 
 router.get('/:lampName', (req, res) => {
+    //Detta är get funktionen som används av lampan. Om avsändaren har med ett "lampName" så kommer denna get att köras
+    //Dess syfte är att hämta ut värden för en specifik Lampa i databasen
     var found=false;
     var OutputValue;
     Values_fromDB.forEach(element => {
         if (element.LampName== req.params.lampName) {
             found=true;
             OutputValue =element;
+            //Om lampName stämmer överens med ett namn i databasen så går den vidare och skicka värden, om inte får man ett felmeddelande
         }
     });
     if (found!= true) {
@@ -69,6 +74,7 @@ router.get('/:lampName', (req, res) => {
 
 
 router.patch('/:LampName', (req, res, next) => {
+    //Patch används för att ändra värden i databasen, vilket vi använder för att ändra ljusstyrkan
 
     const Lamp = {
         Name: req.body.Name,
@@ -76,6 +82,7 @@ router.patch('/:LampName', (req, res, next) => {
         Cold: req.body.Cold,
         LED: req.body.LED
     }
+    //vi skapar variabeln lamp som innehåller alla värden som skickats i bodyn till databasen.
 
     var updateproduct= function(){
         return new Promise(function(resolve,reject){
@@ -88,8 +95,10 @@ router.patch('/:LampName', (req, res, next) => {
               });
         });
     } 
+    //updateproduct använder sig av variabeln Lamp och SQL-kod för att hämta värden från databasen.
 
     updateproduct().then( result => {
+        //kom ihåg att det är först här som funktionen körs. Innan detta skapade vi bara funktionen, men vi körde den inte.
 
        if (result.affectedRows>=1) {
             res.status(200).json(result);
@@ -141,6 +150,7 @@ CreatedLamp().then( NewLamp => {
     })
 });
 });
+//Post är densamma som patch men istället för att ändra värden så lägger vi in nya värden.
 
 
 router.delete('/:LampName', (req, res, next) => {
@@ -156,6 +166,7 @@ router.delete('/:LampName', (req, res, next) => {
               });
         });
     } 
+    //Vi använder oss av lampName som skickas med för att ta bort värden från databasen
 
     DeleteLamp().then( result => {
 

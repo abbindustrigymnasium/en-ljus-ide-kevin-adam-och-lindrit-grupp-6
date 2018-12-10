@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const lampRoutes = require('./api/routes/lampa');
 
+//variabler som säger till vad vi ska vi använda
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -19,6 +21,7 @@ app.use((res, req, next) => {
 });
 
 app.use('/lampa', lampRoutes);
+//Vi ser till att filen lampa.js ska användas
 
 app.use((req, res, next) => {
     const error = new Error('Rackarns nu gick det fel');
