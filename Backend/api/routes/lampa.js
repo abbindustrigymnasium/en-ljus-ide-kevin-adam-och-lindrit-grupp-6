@@ -20,6 +20,9 @@ var Values_fromDB;
 var cron = require('node-cron');
 cron.schedule('* * * * * *', () => {
 
+    //Vi använder node-cron för att ständigt hålla våras värden uppdaterade.
+    //6 stjärnor innebär att den utför arbetet varje sekund
+
     var GetLight = function () {
         return new Promise(function (resolve, reject) {
             connection.query("SELECT * FROM lamapen", function (err,result) {
@@ -34,6 +37,7 @@ cron.schedule('* * * * * *', () => {
     GetLight().then(response => {
         Values_fromDB= response;
         //console.log(Values_fromDB);
+        //Vi skapar variabeln GetLight och gör den till en funktion som hämtar värden från databasen
     })
 }, null, true, 'America/Los_Angeles');
 
