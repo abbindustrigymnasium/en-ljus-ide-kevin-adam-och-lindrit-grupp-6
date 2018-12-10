@@ -1,17 +1,18 @@
-#define Green 13
+#define Green 13              //pinnarna vi vill använda
 #define Red 14
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
-//inkludera arduinojson
 #include <ArduinoJson.h>
 //needed for library
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
+//alla libraries vi vill använda
 
 String LampName="SLAYER";
 int LampStrengthWarm= 0;
 int LampStrengthCold= 0;
 int LEDSwitch= 0;
+//Variabler, värdena spelar ingen roll då de kommer bytas ut. Namnet däremot är hårdkodat och kommer inte att ändras
 bool LampExist=false;
 bool GottenValues = false;
 
@@ -55,6 +56,7 @@ String GetfromDB(String host){
     "\r\nConnection: close\r\n\r\n"; //skickar vår buffer som  body  
   return Output; 
 } 
+//Vi använder våran get/:lampName som finns i backenden. Det betyder att den hämtar alla värden där namnet kommer vara samma som våran LampName
 
 void UpdateValues(String json){       
   //Vi skapar ett Jsonobjekt där vi klistrar in värdena från bodyn       
@@ -97,10 +99,13 @@ void LEDSwitcher(){
     analogWrite(Red, LampStrengthCold);
   };
 }
+//Vi läser av värdena från databasen. Bereonde på vad de säger så kommer olika ledstrips lysa. Styrkorna kontrolleras av något vi kallar LampStrength som finns för både varmt och kallt.
+//Det är lampstrength värdena som avgör hur starkt våra LEDs i lampan kommer lysa.
 
 
 void setup() {
-    pinMode(Green,OUTPUT);
+    pinMode(Green,OUTPUT);      // Vi ansluter till pinnarna på baskortet till mikroprocessorn genom variablerna som definerades längst upp.
+    pinMode(Red,OUTPUT);
     
     
     Serial.begin(115200);
