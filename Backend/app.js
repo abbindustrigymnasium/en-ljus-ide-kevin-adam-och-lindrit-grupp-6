@@ -2,9 +2,6 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const productRoutes = require('./api/routes/products');
-//const orderRoutes = require('./api/routes/orders');
-//const lightRoutes = require('./api/routes/light');
 const lampRoutes = require('./api/routes/lampa');
 
 app.use(morgan('dev'));
@@ -21,9 +18,6 @@ app.use((res, req, next) => {
     next();
 });
 
-app.use('/products', productRoutes);
-//app.use('/orders', orderRoutes);
-//app.use('/light', lightRoutes);
 app.use('/lampa', lampRoutes);
 
 app.use((req, res, next) => {
