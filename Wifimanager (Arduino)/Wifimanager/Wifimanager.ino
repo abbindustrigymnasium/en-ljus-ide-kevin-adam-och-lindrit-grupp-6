@@ -1,4 +1,5 @@
-#define D7 13
+#define Green 13
+#define Red 14
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 //inkludera arduinojson
 #include <ArduinoJson.h>
@@ -78,17 +79,28 @@ void UpdateValues(String json){
     GottenValues = true; 
     }
 
-
-void UpdatingLamp() {
-  if(LampStrengthWarm>50)
-  digitalWrite(D7,HIGH);
-  else
-  digitalWrite(D7,LOW);
+void LEDSwitcher(){ 
+  if (LEDSwitch == 0) {
+    digitalWrite(Green, LOW);
+    digitalWrite(Red, LOW);
+  };
+  if (LEDSwitch == 1) {
+    analogWrite(Green, LampStrengthWarm);
+    digitalWrite(Red, LOW);
+  };
+  if (LEDSwitch == 2) {
+    digitalWrite(Green, LOW);
+    analogWrite(Red, LampStrengthCold);
+  };
+  if (LEDSwitch == 3) {
+    analogWrite(Green, LampStrengthWarm);
+    analogWrite(Red, LampStrengthCold);
+  };
 }
 
 
 void setup() {
-    pinMode(D7,OUTPUT);
+    pinMode(Green,OUTPUT);
     
     
     Serial.begin(115200);
@@ -118,7 +130,7 @@ void setup() {
 
 void ConnecttoDB(String input){    
   const int httpPort = 1337; //porten vi ska till   
-  const char* host = "192.168.0.126";//Adressen vi ska ansluta til       
+  const char* host = "10.22.2.93";//Adressen vi ska ansluta til       
   Serial.print("connecting to ");  
   Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
   // Use WiFiClient class to create TCP connections   
@@ -161,12 +173,12 @@ while (client.available() == 0) {
     Serial.println("closing connection"); 
     } 
   
-
+  
 
 void loop() {
   
     ConnecttoDB("GET");
-    UpdatingLamp();
+    LEDSwitcher();
     Serial.println(LampName);
     Serial.println(LampStrengthWarm);
     Serial.println(LampStrengthCold);
