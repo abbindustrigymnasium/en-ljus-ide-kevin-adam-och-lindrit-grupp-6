@@ -130,7 +130,7 @@ void setup() {
 
 void ConnecttoDB(String input){    
   const int httpPort = 1337; //porten vi ska till   
-  const char* host = "192.168.0.126";//Adressen vi ska ansluta til       
+  const char* host = "10.22.2.93";//Adressen vi ska ansluta til       
   Serial.print("connecting to ");  
   Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
   // Use WiFiClient class to create TCP connections   
