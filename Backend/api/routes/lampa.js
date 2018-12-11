@@ -83,11 +83,27 @@ router.patch('/:LampName', (req, res, next) => {
         LED: req.body.LED
     }
     //vi skapar variabeln lamp som innehåller alla värden som skickats i bodyn till databasen.
-
+    let query= "UPDATE `lamapen` SET ";
+    let data=[];
+    if (Lamp.Warm!=null) {
+        query+= "`LampStrengthWarm`= ?, ";
+        data.push(Lamp.Warm,);
+    }
+    if (Lamp.Cold!=null) {
+        query+= "`LampStrengthCold`= ?, ";
+        data.push(Lamp.Cold,);
+    }
+    if (Lamp.LED!=null) {
+        query+= "`LEDSwitch`= ?, ";
+        data.push(Lamp.LED,);
+    }
+    query = query.slice(0, -2);
+    query+= " WHERE `LampName` = ?";
+    data.push(Lamp.Name)
     var updateproduct= function(){
         return new Promise(function(resolve,reject){
 
-            connection.query('UPDATE `lamapen` SET `LampStrengthWarm`= ?, `LampStrengthCold`= ?, `LEDSwitch`= ? WHERE `LampName` = ?',[Lamp.Warm, Lamp.Cold, Lamp.LED, Lamp.Name], function (error, results, fields) {
+            connection.query(query,data, function (error, results, fields) {
                 if (error)
                 return reject(error);
                 else
