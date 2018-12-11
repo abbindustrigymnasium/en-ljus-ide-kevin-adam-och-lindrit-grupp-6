@@ -134,7 +134,7 @@ void setup() {
 }
 
 void ConnecttoDB(String input){    
-  const int httpPort = 1337; //porten vi ska till   
+  const int httpPort = 3001; //porten vi ska till   
   const char* host = "iot.abbindustrigymnasium.se";//Adressen vi ska ansluta til       
   Serial.print("connecting to ");  
   Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
