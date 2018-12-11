@@ -1,5 +1,5 @@
 #define Green 13              //pinnarna vi vill använda
-#define Red 14
+#define Red 15
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #include <ArduinoJson.h>
 //needed for library
@@ -23,7 +23,7 @@ String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)
   Serial.println("Skickar värde första gången");   
   StaticJsonBuffer<300> jsonBuffer; //Skapar en buffer, det vill säga så mycket minne som vårt blivande jsonobjekt får använda.   
   JsonObject& root = jsonBuffer.createObject(); //Skapar ett jsonobjekt som vi kallar root   
-  root["Name"] = LampName; //Skapar parameterna name och ger den värdet Lampname   
+  root["Name"] = LampName; //Skapar parameterna name och ger den värdet LampName   
   root["Warm"] = LampStrengthWarm;   
   root["Cold"] = LampStrengthCold;
   root["LED"] = LEDSwitch;// Samma som ovan   
