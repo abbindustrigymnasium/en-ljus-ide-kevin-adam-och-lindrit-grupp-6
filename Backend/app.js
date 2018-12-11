@@ -21,7 +21,7 @@ app.use((res, req, next) => {
 });
 
 app.use('/lampa', lampRoutes);
-//Vi ser till att filen lampa6.js ska användas
+//Vi ser till att filen lampa.js ska användas
 
 app.use((req, res, next) => {
     const error = new Error('Rackarns nu gick det fel');

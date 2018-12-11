@@ -19,7 +19,7 @@ bool GottenValues = false;
 
 String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)    
 {   
-  String url= "/lampa/"; //Urlen jag använder för att posta mina värden       
+  String url= "/grupp6/"; //Urlen jag använder för att posta mina värden       
   Serial.println("Skickar värde första gången");   
   StaticJsonBuffer<300> jsonBuffer; //Skapar en buffer, det vill säga så mycket minne som vårt blivande jsonobjekt får använda.   
   JsonObject& root = jsonBuffer.createObject(); //Skapar ett jsonobjekt som vi kallar root   
@@ -135,7 +135,7 @@ void setup() {
 
 void ConnecttoDB(String input){    
   const int httpPort = 1337; //porten vi ska till   
-  const char* host = "10.22.2.93";//Adressen vi ska ansluta til       
+  const char* host = "iot.abbindustrigymnasium.se";//Adressen vi ska ansluta til       
   Serial.print("connecting to ");  
   Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
   // Use WiFiClient class to create TCP connections   
