@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const lampRoutes = require('./api/routes/lampa6');
+const lampRoutes = require('./api/routes/lampa');
 
 //variabler som säger till vad vi ska vi använda
 
@@ -20,7 +20,7 @@ app.use((res, req, next) => {
     next();
 });
 
-app.use('/lampa6', lampRoutes);
+app.use('/lampa', lampRoutes);
 //Vi ser till att filen lampa6.js ska användas
 
 app.use((req, res, next) => {
