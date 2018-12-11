@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const lampRoutes = require('./api/routes/lampa');
+const lampRoutes = require('./api/routes/lampa6');
 
 //variabler som säger till vad vi ska vi använda
 
@@ -20,8 +20,8 @@ app.use((res, req, next) => {
     next();
 });
 
-app.use('/lampa', lampRoutes);
-//Vi ser till att filen lampa.js ska användas
+app.use('/lampa6', lampRoutes);
+//Vi ser till att filen lampa6.js ska användas
 
 app.use((req, res, next) => {
     const error = new Error('Rackarns nu gick det fel');
