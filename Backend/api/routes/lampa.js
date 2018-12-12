@@ -83,7 +83,7 @@ router.patch('/:LampName', (req, res, next) => {
         LED: req.body.LED,
         Bright: req.body.Bright,
         Warmpr: req.body.Warmpr,
-        Coldpr: req.body.Warmpr
+        Coldpr: req.body.Coldpr
     }
     //vi skapar variabeln lamp som innehåller alla värden som skickats i bodyn till databasen.
     let query= "UPDATE `lamapen` SET ";
