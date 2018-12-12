@@ -49,7 +49,7 @@ String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)
 
 
 String GetfromDB(String host){ 
-  String url= "/lampa/"+LampName; //Urlen jag använder för att posta mina värden   
+  String url= "/grupp6/"+LampName; //Urlen jag använder för att posta mina värden   
   // Detta skickar värdena till servern.    
   String Output = "GET "+  url + " HTTP/1.1\r\n" + //Säger att det är typen post, kan vara patch, get,delete beroende på vad man vill göra., samt urlen vi ska till.                  
     "Host: " + host+ "\r\n" + //Berättar vilken host det är vi ansluter till                  
