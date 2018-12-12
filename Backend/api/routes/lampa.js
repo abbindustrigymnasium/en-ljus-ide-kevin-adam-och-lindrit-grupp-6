@@ -16,16 +16,18 @@ connection.connect( function(err) {
     } else
     console.log("Sassa Massa");
 });
-// Vi testar om vi kan koppla upp. Om det går kommer den skriva ut Sassa Massa
+// Vi testar om vi kan koppla upp med väran variabel. Om det går kommer den skriva ut Sassa Massa
 
-var Values_fromDB;
+var Values_fromDB; //Vi skapae en global variabel, vilket gör att den kan användas överallt inom lampa.js eftersom att den är inte bunden till någon funktion.
 var cron = require('node-cron');
 cron.schedule('* * * * * *', () => {
 
     //Vi använder node-cron för att ständigt hålla våras värden uppdaterade.
     //6 stjärnor innebär att den utför arbetet varje sekund
+    //Detta är så att så fort lampan eller appen vill ha värden så har backenden redan värden.
+    //Det innebär att den inte behöver hämta nya värden från databasen varje gång man vill något.
 
-    var GetLight = function () {
+    var GetLight = function () {                            
         return new Promise(function (resolve, reject) {
             connection.query("SELECT * FROM lamapen", function (err,result) { 
                 if (err) {
@@ -33,13 +35,13 @@ cron.schedule('* * * * * *', () => {
                 } else {
                     return resolve(result);
                 }
-            });
+            }); //Vi skapar variabeln GetLight och gör den till en funktion som hämtar värden från databasen
+            //SQL kod används delvis eftersom att det är det språk som databasen förstår.
         });
     }
     GetLight().then(response => {
         Values_fromDB= response;
-        //console.log(Values_fromDB);
-        //Vi skapar variabeln GetLight och gör den till en funktion som hämtar värden från databasen
+        //Sedan lägger vi över värdena som hämtades till en variabel kallad Values_fromDB
     })
 }, null, true, 'America/Los_Angeles');
 
@@ -50,7 +52,7 @@ router.get('', (req, res) => {
     });
 
 router.get('/:lampName', (req, res) => {
-    //Detta är get funktionen som används av lampan. Om avsändaren har med ett "lampName" så kommer denna get att köras
+    //Detta är get funktionen som används av lampan. Om avsändaren har med ett "lampName" i sin GET-request så kommer denna get att köras
     //Dess syfte är att hämta ut värden för en specifik Lampa i databasen
     var found=false;
     var OutputValue;
@@ -58,7 +60,7 @@ router.get('/:lampName', (req, res) => {
         if (element.LampName== req.params.lampName) {
             found=true;
             OutputValue =element;
-            //Om lampName stämmer överens med ett namn i databasen så går den vidare och skicka värden, om inte får man ett felmeddelande
+            //Om lampName stämmer överens med ett LampName i Values_fromDB (se ovan) så kommer den hämta det värdet. 
         }
     });
     if (found!= true) {
@@ -126,7 +128,7 @@ router.patch('/:LampName', (req, res, next) => {
               });
         });
     } 
-    //updateproduct använder sig av variabeln Lamp och SQL-kod för att hämta värden från databasen.
+    //updateproduct 
 
     updateproduct().then( result => {
         //kom ihåg att det är först här som funktionen körs. Innan detta skapade vi bara funktionen, men vi körde den inte.
@@ -181,7 +183,6 @@ CreatedLamp().then( NewLamp => {
     })
 });
 });
-//Post är densamma som patch men istället för att ändra värden så lägger vi in nya värden.
 
 
 router.delete('/:LampName', (req, res, next) => {
@@ -207,7 +208,7 @@ router.delete('/:LampName', (req, res, next) => {
         }
         else
         res.status(200).json({
-            message: "You better not delete the slayer lamp,"
+            message: "You better not delete the SLAYER lamp,"
         } );
     }).catch(error => {
             res.status(500).json({

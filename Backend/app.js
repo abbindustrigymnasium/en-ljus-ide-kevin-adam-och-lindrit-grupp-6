@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const lampRoutes = require('./api/routes/lampa');
 
-//variabler som säger till vad vi ska vi använda
+//vi konstaterar vad vi vill använda
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -28,7 +28,8 @@ app.use((req, res, next) => {
     error.status = 404;
     next(error);
 })
-
+/*Ifall något inte funkar så kommer vi få ett 404 och ett felmeddelande. Detta gäller när vi har kommit fram till backended men inte till 
+någon route.*/
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
