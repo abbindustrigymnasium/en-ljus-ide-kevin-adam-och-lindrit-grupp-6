@@ -80,7 +80,10 @@ router.patch('/:LampName', (req, res, next) => {
         Name: req.body.Name,
         Warm: req.body.Warm,
         Cold: req.body.Cold,
-        LED: req.body.LED
+        LED: req.body.LED,
+        Bright: req.body.Bright,
+        Warmpr: req.body.Warmpr,
+        Coldpr: req.body.Warmpr
     }
     //vi skapar variabeln lamp som innehåller alla värden som skickats i bodyn till databasen.
     let query= "UPDATE `lamapen` SET ";
@@ -96,6 +99,18 @@ router.patch('/:LampName', (req, res, next) => {
     if (Lamp.LED!=null) {
         query+= "`LEDSwitch`= ?, ";
         data.push(Lamp.LED,);
+    }
+    if (Lamp.Bright!=null) {
+        query+= "`Bright`= ?, ";
+        data.push(Lamp.Bright,);
+    }
+    if (Lamp.Warmpr!=null) {
+        query+= "`Warmpr`= ?, ";
+        data.push(Lamp.Warmpr,);
+    }
+    if (Lamp.Coldpr!=null) {
+        query+= "`Coldpr`= ?, ";
+        data.push(Lamp.Coldpr,);
     }
     query = query.slice(0, -2);
     query+= " WHERE `LampName` = ?";
