@@ -50,8 +50,9 @@ String SendtoDB(String host){   String type ="POST ";   if(GottenValues==true)
 
 String GetfromDB(String host){ 
   String url= "/grupp6/"+LampName; //Urlen jag använder för att posta mina värden   
-  // Detta skickar värdena till servern.    
-  String Output = "GET "+  url + " HTTP/1.1\r\n" + //Säger att det är typen post, kan vara patch, get,delete beroende på vad man vill göra., samt urlen vi ska till.                  
+  // Detta skickar en förfrågan till servern.    
+  String Output = "GET "+  url + " HTTP/1.1\r\n" + //Skapar en ny string som säger get och lägger till url'en som vi skapade innan       
+  //Just här vill vi hämta värden och därför så använder vi oss av GET.           
     "Host: " + host+ "\r\n" + //Berättar vilken host det är vi ansluter till                  
     "\r\nConnection: close\r\n\r\n"; //skickar vår buffer som  body  
   return Output; 
@@ -101,16 +102,64 @@ void LEDSwitcher(){
 }
 //Vi läser av värdena från databasen. Bereonde på vad de säger så kommer olika ledstrips lysa. Styrkorna kontrolleras av något vi kallar LampStrength som finns för både varmt och kallt.
 //Det är lampstrength värdena som avgör hur starkt våra LEDs i lampan kommer lysa.
+//analogwrite är att föredra eftersom att den använder pulsbreddsmodulering vilket gör att vi kan dimmra ljuset och justera exakt hur starkt vi vill ha det.
 
+
+void ConnecttoDB(String input){    
+  const int httpPort = 3001; //porten vi ska till   
+  const char* host = "iot.abbindustrigymnasium.se";//Adressen vi ska ansluta til       
+  Serial.print("connecting to ");  
+  Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
+  // Use WiFiClient class to create TCP connections   
+  WiFiClient client;   
+  if (!client.connect(host, httpPort)) { //Försöker ansluta     
+    Serial.println("connection failed");     
+    return;   
+  } 
+ 
+if(input =="GET") 
+client.print(GetfromDB(host)); 
+//Här skriver vi ut url'en från getfromDB till klienten. Det på så vis vet den vad vi vill och kommer utföra det vi vill åt oss.
+else 
+client.print(SendtoDB(host));   
+unsigned long timeout = millis();   
+while (client.available() == 0) {     
+  if (millis() - timeout > 10000) {       
+    Serial.println(">>> Client Timeout !");       
+    client.stop();       
+    return;     
+  } 
+}
+  String json = ""; //De delarna vi vill ha ut av meddelandet sparar vi i stringen json 
+  boolean httpBody = false; //bool för att säga att vi har kommit ner till bodydelen 
+  // tittar om vi har anslutit till clienten 
+  while (client.available()) {   
+    String line = client.readStringUntil('\r'); //Läser varje rad tills det är slut på rader   
+    if (!httpBody && line.charAt(1) == '{') { //Om vi hittar { så vet vi att vi har nått bodyn eftersom att det är så ett json-meddelande ser ut     
+      httpBody = true; //boolen blir true för att vi ska veta för nästa rad att vi redan är i bodyn   
+    }   
+    if (httpBody) { //Om bodyn är sann lägg till raden i json variabeln     
+      json += line;   
+      } 
+    } 
+    //Skriver ut bodyns data     
+    Serial.println("Got data:");     
+    Serial.println(json);   
+    if(input =="GET") //Om det är Get så kör vi metoden UpdateValues     
+    UpdateValues(json);   
+    Serial.println();   
+    Serial.println("closing connection"); 
+    } 
 
 void setup() {
     pinMode(Green,OUTPUT);      // Vi ansluter till pinnarna på baskortet till mikroprocessorn genom variablerna som definerades längst upp.
-    pinMode(Red,OUTPUT);
+    pinMode(Red,OUTPUT);        //Just här är de nämnda efter LEDs som vi har kopplat in för att kolla så att det funkar
     
     
     Serial.begin(115200);
 
-    //WiFiManager
+    /*WiFiManager är det som användes för att koppla upp mikrodatorn till ett nätverk. När man körde koden skapades en lokal accespoint som man kunde koppla
+    upp mobilen till. Med hjälp av mobilen kunde man konfigurera ett nätverk åt miktodatorn. Efter det så kan den ansluta till det nätverket av sig själv*/
     //Local intialization. Once its business is done, there is no need to keep it around
     WiFiManager wifiManager;
     //reset saved settings
@@ -132,56 +181,10 @@ void setup() {
     //if you get here you have connected to the WiFi
     Serial.println("connected...yeey :)");
 }
-
-void ConnecttoDB(String input){    
-  const int httpPort = 3001; //porten vi ska till   
-  const char* host = "iot.abbindustrigymnasium.se";//Adressen vi ska ansluta til       
-  Serial.print("connecting to ");  
-  Serial.println(host); //Skriver ut i terminalen för att veta vart vi ska skicka värdena.      
-  // Use WiFiClient class to create TCP connections   
-  WiFiClient client;   
-  if (!client.connect(host, httpPort)) { //Försöker ansluta     
-    Serial.println("connection failed");     
-    return;   
-  } 
- 
-if(input =="GET") 
-client.print(GetfromDB(host)); 
-else 
-client.print(SendtoDB(host));   
-unsigned long timeout = millis();   
-while (client.available() == 0) {     
-  if (millis() - timeout > 10000) {       
-    Serial.println(">>> Client Timeout !");       
-    client.stop();       
-    return;     
-  } 
-}
-  String json = ""; //De delarna vi vill ha ut av meddelandet sparar vi i stringen json 
-  boolean httpBody = false; //bool för att säa att vi har kommit ner till bodydelen 
-  // tittar om vi har anslutit till clienten 
-  while (client.available()) {   
-    String line = client.readStringUntil('\r'); //Läser varje rad tills det är slut på rader   
-    if (!httpBody && line.charAt(1) == '{') { //Om vi hittar { så vet vi att vi har nått bodyn     
-      httpBody = true; //boolen blir true för att vi ska veta för nästa rad att vi redan är i bodyn   
-    }   
-    if (httpBody) { //Om bodyn är sann lägg till raden i json variabeln     
-      json += line;   
-      } 
-    } 
-    //Skriver ut bodyns data     
-    Serial.println("Got data:");     
-    Serial.println(json);   
-    if(input =="GET") //Om det är Get så kör vi metoden UpdateValues     
-    UpdateValues(json);   
-    Serial.println();   
-    Serial.println("closing connection"); 
-    } 
-  
-  
+    
 
 void loop() {
-  
+  //Loopen är väldigt simpel och består av att vi säger vilka metoder vi vill använda. Serial.Println används även för att kunna kontrollera i serialmonitorn att allt funkar som det ska
     ConnecttoDB("GET");
     LEDSwitcher();
     Serial.println(LampName);
@@ -192,3 +195,4 @@ void loop() {
     // ConnecttoDB("POST");
     //delay(10000);  
 }
+
