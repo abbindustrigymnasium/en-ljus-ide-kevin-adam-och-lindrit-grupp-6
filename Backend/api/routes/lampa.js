@@ -90,6 +90,7 @@ router.patch('/:LampName', (req, res, next) => {
     //vi skapar variabeln lamp som innehåller alla värden som skickats i bodyn till databasen.
     let query= "UPDATE `lamapen` SET ";
     let data=[];
+    //gör en string vid namn query och en tom array some heter data.
     if (Lamp.Warm!=null) {
         query+= "`LampStrengthWarm`= ?, ";
         data.push(Lamp.Warm,);
@@ -114,6 +115,11 @@ router.patch('/:LampName', (req, res, next) => {
         query+= "`Coldpr`= ?, ";
         data.push(Lamp.Coldpr,);
     }
+    /*Vi kollar på värdena i Lamp och kollar om de har några värden. Om de har det
+    lägger vi till text i query och lägger till värdet i data-arrayen. Anledningen till
+    att vi gör så här är för att fungera ihop med appen. Vi märkte att om man bara ville
+    ändra ett värde i databasen utan att nämna de andra så blev de andra nollställda. Genom
+    att göra på detta vis så kan vi ändra enstaka värden utan att nollställa andra värden. */
     query = query.slice(0, -2);
     query+= " WHERE `LampName` = ?";
     data.push(Lamp.Name)
@@ -128,7 +134,11 @@ router.patch('/:LampName', (req, res, next) => {
               });
         });
     } 
-    //updateproduct 
+    /*Efter att ha gått igenom if-satserna ovan kommer query-stringen se ut som SQL-kod
+    och data-arrayen kommer vara full av värden som vi vill använda till SQL-koden.
+    Ifall man ser på det på detta vis så inser man att patchfunktionen egentligen
+    funkar precis likadant som de andra funktionerna, ända skillnaden är att vi kan
+    skräddarsy funktionen efter vad vi behöver just då.*/
 
     updateproduct().then( result => {
         //kom ihåg att det är först här som funktionen körs. Innan detta skapade vi bara funktionen, men vi körde den inte.
