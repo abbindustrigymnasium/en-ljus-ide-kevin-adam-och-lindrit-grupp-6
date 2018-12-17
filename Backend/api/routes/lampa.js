@@ -16,16 +16,18 @@ connection.connect( function(err) {
     } else
     console.log("Sassa Massa");
 });
-// Vi testar om vi kan koppla upp. Om det går kommer den skriva ut Sassa Massa
+// Vi testar om vi kan koppla upp med väran variabel. Om det går kommer den skriva ut Sassa Massa
 
-var Values_fromDB;
+var Values_fromDB; //Vi skapae en global variabel, vilket gör att den kan användas överallt inom lampa.js eftersom att den är inte bunden till någon funktion.
 var cron = require('node-cron');
 cron.schedule('* * * * * *', () => {
 
     //Vi använder node-cron för att ständigt hålla våras värden uppdaterade.
     //6 stjärnor innebär att den utför arbetet varje sekund
+    //Detta är så att så fort lampan eller appen vill ha värden så har backenden redan värden.
+    //Det innebär att den inte behöver hämta nya värden från databasen varje gång man vill något.
 
-    var GetLight = function () {
+    var GetLight = function () {                            
         return new Promise(function (resolve, reject) {
             connection.query("SELECT * FROM lamapen", function (err,result) { 
                 if (err) {
@@ -33,13 +35,13 @@ cron.schedule('* * * * * *', () => {
                 } else {
                     return resolve(result);
                 }
-            });
+            }); //Vi skapar variabeln GetLight och gör den till en funktion som hämtar värden från databasen
+            //SQL kod används delvis eftersom att det är det språk som databasen förstår.
         });
     }
     GetLight().then(response => {
         Values_fromDB= response;
-        //console.log(Values_fromDB);
-        //Vi skapar variabeln GetLight och gör den till en funktion som hämtar värden från databasen
+        //Sedan lägger vi över värdena som hämtades till en variabel kallad Values_fromDB
     })
 }, null, true, 'America/Los_Angeles');
 
@@ -50,7 +52,7 @@ router.get('', (req, res) => {
     });
 
 router.get('/:lampName', (req, res) => {
-    //Detta är get funktionen som används av lampan. Om avsändaren har med ett "lampName" så kommer denna get att köras
+    //Detta är get funktionen som används av lampan. Om avsändaren har med ett "lampName" i sin GET-request så kommer denna get att köras
     //Dess syfte är att hämta ut värden för en specifik Lampa i databasen
     var found=false;
     var OutputValue;
@@ -58,7 +60,7 @@ router.get('/:lampName', (req, res) => {
         if (element.LampName== req.params.lampName) {
             found=true;
             OutputValue =element;
-            //Om lampName stämmer överens med ett namn i databasen så går den vidare och skicka värden, om inte får man ett felmeddelande
+            //Om lampName stämmer överens med ett LampName i Values_fromDB (se ovan) så kommer den hämta det värdet. 
         }
     });
     if (found!= true) {
@@ -83,11 +85,12 @@ router.patch('/', (req, res, next) => {
         LED: req.body.LED,
         Bright: req.body.Bright,
         Warmpr: req.body.Warmpr,
-        Coldpr: req.body.Warmpr
+        Coldpr: req.body.Coldpr
     }
     //vi skapar variabeln lamp som innehåller alla värden som skickats i bodyn till databasen.
     let query= "UPDATE `lamapen` SET ";
     let data=[];
+    //gör en string vid namn query och en tom array some heter data.
     if (Lamp.Warm!=null) {
         query+= "`LampStrengthWarm`= ?, ";
         data.push(Lamp.Warm,);
@@ -112,6 +115,11 @@ router.patch('/', (req, res, next) => {
         query+= "`Coldpr`= ?, ";
         data.push(Lamp.Coldpr,);
     }
+    /*Vi kollar på värdena i Lamp och kollar om de har några värden. Om de har det
+    lägger vi till text i query och lägger till värdet i data-arrayen. Anledningen till
+    att vi gör så här är för att fungera ihop med appen. Vi märkte att om man bara ville
+    ändra ett värde i databasen utan att nämna de andra så blev de andra nollställda. Genom
+    att göra på detta vis så kan vi ändra enstaka värden utan att nollställa andra värden. */
     query = query.slice(0, -2);
     query+= " WHERE `LampName` = ?";
     data.push(Lamp.Name)
@@ -126,7 +134,11 @@ router.patch('/', (req, res, next) => {
               });
         });
     } 
-    //updateproduct använder sig av variabeln Lamp och SQL-kod för att hämta värden från databasen.
+    /*Efter att ha gått igenom if-satserna ovan kommer query-stringen se ut som SQL-kod
+    och data-arrayen kommer vara full av värden som vi vill använda till SQL-koden.
+    Ifall man ser på det på detta vis så inser man att patchfunktionen egentligen
+    funkar precis likadant som de andra funktionerna, ända skillnaden är att vi kan
+    skräddarsy funktionen efter vad vi behöver just då.*/
 
     updateproduct().then( result => {
         //kom ihåg att det är först här som funktionen körs. Innan detta skapade vi bara funktionen, men vi körde den inte.
@@ -153,15 +165,17 @@ router.post('', (req, res, next) => {
         Name: req.body.Name,
         Warm: req.body.Warm,
         Cold: req.body.Cold,
-        LED: req.body.LED
+        LED: req.body.LED             //för över värden från bodyn till variabler
     }
 
     var CreatedLamp= function(){
         return new Promise(function(resolve,reject){
 
-            var LampValues = [Lamp.Name, Lamp.Warm, Lamp.Cold, Lamp.LED]
+            var LampValues = [Lamp.Name, Lamp.Warm, Lamp.Cold, Lamp.LED] //För över Lamp värdena till en gemensam variabel.
 
-            connection.query('INSERT INTO `lamapen` (`LampName`, `LampStrengthWarm`, `LampStrengthCold`, `LEDSwitch`) VALUES ?',[[LampValues]], function (error, results, fields) {
+            connection.query('INSERT INTO `lamapen` (`LampName`, `LampStrengthWarm`, `LampStrengthCold`, `LEDSwitch`) VALUES ?',[[LampValues]],
+            //använder SQL kod och för att skicka in nya värden. Värdena som används är de från LampValues som kommer från bodyn.
+            function (error, results, fields) {
                 if (error)
                 return reject(error);
                 else
@@ -181,7 +195,6 @@ CreatedLamp().then( NewLamp => {
     })
 });
 });
-//Post är densamma som patch men istället för att ändra värden så lägger vi in nya värden.
 
 
 router.delete('/:LampName', (req, res, next) => {
@@ -207,7 +220,7 @@ router.delete('/:LampName', (req, res, next) => {
         }
         else
         res.status(200).json({
-            message: "You better not delete the slayer lamp,"
+            message: "You better not delete the SLAYER lamp,"
         } );
     }).catch(error => {
             res.status(500).json({
