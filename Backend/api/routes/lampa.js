@@ -165,15 +165,17 @@ router.post('', (req, res, next) => {
         Name: req.body.Name,
         Warm: req.body.Warm,
         Cold: req.body.Cold,
-        LED: req.body.LED
+        LED: req.body.LED             //för över värden från bodyn till variabler
     }
 
     var CreatedLamp= function(){
         return new Promise(function(resolve,reject){
 
-            var LampValues = [Lamp.Name, Lamp.Warm, Lamp.Cold, Lamp.LED]
+            var LampValues = [Lamp.Name, Lamp.Warm, Lamp.Cold, Lamp.LED] //För över Lamp värdena till en gemensam variabel.
 
-            connection.query('INSERT INTO `lamapen` (`LampName`, `LampStrengthWarm`, `LampStrengthCold`, `LEDSwitch`) VALUES ?',[[LampValues]], function (error, results, fields) {
+            connection.query('INSERT INTO `lamapen` (`LampName`, `LampStrengthWarm`, `LampStrengthCold`, `LEDSwitch`) VALUES ?',[[LampValues]],
+            //använder SQL kod och för att skicka in nya värden. Värdena som används är de från LampValues som kommer från bodyn.
+            function (error, results, fields) {
                 if (error)
                 return reject(error);
                 else
