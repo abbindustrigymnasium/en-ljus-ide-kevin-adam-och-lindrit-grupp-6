@@ -3,11 +3,11 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	TouchableWithoutFeedback,
+	TouchableOpacity,
 } from 'react-native';
 
 
-export default class Component8 extends React.Component {
+export default class Component10 extends React.Component {
 
 
     render() {
@@ -31,18 +31,16 @@ export default class Component8 extends React.Component {
 
                 			<View style={styles.itemcontainer1Inner}>
 
-                                <View style={styles.item1}>
-										<TouchableWithoutFeedback 
-											onPress={() => this.props.navigation.navigate('Screen4', {})}
-										>
-											<View>
-												<Text style={styles.item1TouchableWithoutFeedback}>
-													Statistics
-												</Text>
-											</View>
+                                <TouchableOpacity 
+										style={styles.item1}
+										onPress={() => this.props.navigation.navigate('Screen5', {})}
+									>
+										
+										<Text style={styles.item1TouchableOpacity}>
+											Presets
+										</Text>
 									
-										</TouchableWithoutFeedback>
-									</View>
+									</TouchableOpacity>
 
                 			</View>
 
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
 	    padding: 10,
 	},
 	
-	item1TouchableWithoutFeedback: {
+	item1TouchableOpacity: {
 	    color: '#fff',
 	    fontSize: 14,
 	    textAlign: 'center',

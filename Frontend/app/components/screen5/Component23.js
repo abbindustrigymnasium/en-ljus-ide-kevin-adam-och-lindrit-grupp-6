@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 
-export default class Component10 extends React.Component {
+export default class Component2 extends React.Component {
 
 
     render() {
@@ -33,16 +33,16 @@ export default class Component10 extends React.Component {
 
                                 <TouchableOpacity 
 										style={styles.item1}
-										onPress={() => this.props.navigation.navigate('Screen3', {})}
+										onPress={ this.UpdateDataToServer}
 									>
 										
 										<Text style={styles.item1TouchableOpacity}>
-											Adjust
+											Preset #4
 										</Text>
 									
 									</TouchableOpacity>
-
-                			</View>
+                			
+							</View>
 
                 		</View>
 

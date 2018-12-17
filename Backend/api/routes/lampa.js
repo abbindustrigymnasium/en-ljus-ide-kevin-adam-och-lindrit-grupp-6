@@ -73,7 +73,7 @@ router.get('/:lampName', (req, res) => {
 });
 
 
-router.patch('/:LampName', (req, res, next) => {
+router.patch('/', (req, res, next) => {
     //Patch används för att ändra värden i databasen, vilket vi använder för att ändra ljusstyrkan
 
     const Lamp = {

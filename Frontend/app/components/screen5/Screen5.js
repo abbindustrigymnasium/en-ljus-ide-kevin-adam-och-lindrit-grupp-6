@@ -4,19 +4,27 @@ import {
     View,
 } from 'react-native';
 
-import Component17 from './Component17';
-import Component18 from './Component18';
+import Component20 from './Component20';
+import Component21 from './Component21';
+import Component22 from './Component22';
+import Component23 from './Component23';
+import Component24 from './Component24';
+// import Component25 from './Component25';
 import Component19 from './Component19';
 
-export default class Screen4 extends React.Component {
+export default class Screen5 extends React.Component {
 
     constructor(props) {
 
         super(props);
 
         this.state = {
-            Component17Visible: true,
-            Component18Visible: true,
+            Component20Visible: true,
+            Component21Visible: true,
+            Component22Visible: true,
+            Component23Visible: true,
+            Component24Visible: true,
+            Component25Visible: true,
             Component19Visible: true,
         }
 
@@ -84,19 +92,40 @@ export default class Screen4 extends React.Component {
 
                     <View style={styles.screencontainerInner}>
 
-                        <Component17 
+                        <Component20 
                             navigation={this.props.navigation}
                             toggleComponent={ (component) => this.toggleComponent(component) }
                             hideComponent={ (component) => this.hideComponent(component) }
                             showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component17Visible }
+                            visible={ this.state.Component20Visible }
                         />
-                        <Component18 
+                        <Component21 
                             navigation={this.props.navigation}
                             toggleComponent={ (component) => this.toggleComponent(component) }
                             hideComponent={ (component) => this.hideComponent(component) }
                             showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component18Visible }
+                            visible={ this.state.Component21Visible }
+                        />
+                        <Component22
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component22Visible }
+                        />
+                        <Component23 
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component23Visible }
+                        />
+                        <Component24 
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component24Visible }
                         />
                         <Component19 
                             navigation={this.props.navigation}
@@ -105,6 +134,13 @@ export default class Screen4 extends React.Component {
                             showComponent={ (component) => this.showComponent(component) }
                             visible={ this.state.Component19Visible }
                         />
+                        {/* <Component25
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component25Visible }
+                        /> */}
 
                     </View>
 

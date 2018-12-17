@@ -5,11 +5,14 @@ import {
 } from 'react-native';
 
 import Component9 from './Component9';
-import Component6 from './Component6';
-import Component7 from './Component7';
+// import Component6 from './Component6';
+// import Component7 from './Component7';
 import Component10 from './Component10';
 import Component8 from './Component8';
 import Component11 from './Component11';
+import Component26 from './Component26';
+import Component13 from './Component13';
+import Component25 from './Component13';
 
 export default class Screen2 extends React.Component {
 
@@ -24,6 +27,9 @@ export default class Screen2 extends React.Component {
             Component10Visible: true,
             Component8Visible: true,
             Component11Visible: true,
+            Component26Visible: true,
+            Component13Visible: true,
+            Component25Visible: true,
         }
 
     }
@@ -90,26 +96,49 @@ export default class Screen2 extends React.Component {
 
                     <View style={styles.screencontainerInner}>
 
+                       
                         <Component9 
                             navigation={this.props.navigation}
                             toggleComponent={ (component) => this.toggleComponent(component) }
                             hideComponent={ (component) => this.hideComponent(component) }
                             showComponent={ (component) => this.showComponent(component) }
                             visible={ this.state.Component9Visible }
+                        /> 
+                        <Component26 
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component26Visible }
                         />
-                        <Component6 
+                        {/* <Component6 
                             navigation={this.props.navigation}
                             toggleComponent={ (component) => this.toggleComponent(component) }
                             hideComponent={ (component) => this.hideComponent(component) }
                             showComponent={ (component) => this.showComponent(component) }
                             visible={ this.state.Component6Visible }
-                        />
-                        <Component7 
+                        /> */}
+                        {/* <Component7 
                             navigation={this.props.navigation}
                             toggleComponent={ (component) => this.toggleComponent(component) }
                             hideComponent={ (component) => this.hideComponent(component) }
                             showComponent={ (component) => this.showComponent(component) }
                             visible={ this.state.Component7Visible }
+                        /> */}
+                        
+                        <Component13 
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component13Visible }
+                        />
+                        <Component25 
+                            navigation={this.props.navigation}
+                            toggleComponent={ (component) => this.toggleComponent(component) }
+                            hideComponent={ (component) => this.hideComponent(component) }
+                            showComponent={ (component) => this.showComponent(component) }
+                            visible={ this.state.Component25Visible }
                         />
                         <Component10 
                             navigation={this.props.navigation}

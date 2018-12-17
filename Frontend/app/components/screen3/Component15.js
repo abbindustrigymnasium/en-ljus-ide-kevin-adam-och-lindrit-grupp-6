@@ -3,21 +3,11 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	Switch,
+	TouchableOpacity,
 } from 'react-native';
 
 
-export default class Component7 extends React.Component {
-
-    constructor(props) {
-    
-        super(props);
-
-        this.state = {
-            switchValue: false,
-        }
-
-    }
+export default class Component15 extends React.Component {
 
 
     render() {
@@ -41,12 +31,16 @@ export default class Component7 extends React.Component {
 
                 			<View style={styles.itemcontainer1Inner}>
 
-                                <View style={styles.item1}>
-										<Switch 
-											value={this.state.switchValue}
-											onValueChange={(val) => this.setState({ switchValue : val })}
-										/>
-									</View>
+                                <TouchableOpacity 
+										style={styles.item1}
+										onPress={() => this.props.navigation.navigate('Screen5', {})}
+									>
+										
+										<Text style={styles.item1TouchableOpacity}>
+											Adjust Lamp Colour
+										</Text>
+									
+									</TouchableOpacity>
 
                 			</View>
 
@@ -82,7 +76,7 @@ const styles = StyleSheet.create({
 	
 	layout1: {
 	    width: '100%',
-	    height: 109.5,
+	    height: 90,
 	},
 	
 	itemcontainer1: {
@@ -103,14 +97,24 @@ const styles = StyleSheet.create({
 	},
 	
 	item1: {
+	    backgroundColor: '#1194f6',
+	    borderWidth: 0,
+	    borderColor: '#eee',
+	    borderStyle: 'solid',
+	    borderRadius: 4,
 	    width: '100%',
 	    height: '100%',
-	    alignItems: 'center',
 	    justifyContent: 'center',
+	    alignItems: 'center',
 	    overflow: 'hidden',
-	    borderStyle: 'solid',
-	    borderWidth: 0,
-	    backgroundColor: 'rgba(239,239,239,1)',
+	    padding: 10,
+	},
+	
+	item1TouchableOpacity: {
+	    color: '#fff',
+	    fontSize: 14,
+	    textAlign: 'center',
+	    width: '100%',
 	},
 	
 });

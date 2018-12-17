@@ -1,0 +1,67 @@
+InsertDataToServer =() => {
+
+	const {value} = this.state;
+		fetch('http//192.168.0.114:1337/lampa',{
+			method: 'PATCH',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+        Name: "AdamTest",
+        Warmpr: (value/100),
+        Coldpr: (1-(value/100)),
+        Warm: (1024*Bright*(value/100)),
+        Cold: (1024*Bright*(1-Warmpr))
+			    })
+		}).then((response) => response.json()).then(responseJSON => {
+
+			console.log(responseJSON);
+			alert(responseJSON.message+'   '+ response.JSON.Product[0])
+
+		}).catch((error)=>{
+			console.log(error);
+		});
+		
+};
+
+fetch:('192.168.0.114:3000/lampa',{
+				  method: 'PATCH',
+				  headers: {
+					  'Accept': 'application/json',
+					  'Content-Type': 'application/json',
+				  },
+				  body: JSON.stringify({
+
+				  })
+			  })
+      }
+
+  }
+};
+
+InsertDataToServer =() => {
+
+	const {value} = this.state;
+		fetch('http//192.168.0.114:1337/lampa',{
+			method: 'PATCH',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				Name: "AdamTest",
+        Bright: (value/100),
+        Warm: (1024*(value/100)*Warmpr),
+        Cold: (1024*(value/100)*Coldpr)
+			    })
+		}).then((response) => response.json()).then(responseJSON => {
+
+			console.log(responseJSON);
+			alert(responseJSON.message+'   '+ response.JSON.Product[0])
+
+		}).catch((error)=>{
+			console.log(error);
+		});
+		
+};
