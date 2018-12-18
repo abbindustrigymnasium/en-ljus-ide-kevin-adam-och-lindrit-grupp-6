@@ -3,17 +3,12 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
+// Här importar jag alla element som behövs för att screenen ska fungera
 
-import Component9 from './Component9';
-// import Component6 from './Component6';
-// import Component7 from './Component7';
-import Component10 from './Component10';
-import Component8 from './Component8';
-import Component11 from './Component11';
 import Component26 from './Component26';
 import Component13 from './Component13';
 import Component25 from './Component13';
-
+// Här importerarna jag alla komponenter från den här mappen som ska visas på den här screenen
 export default class Screen2 extends React.Component {
 
     constructor(props) {
@@ -21,15 +16,10 @@ export default class Screen2 extends React.Component {
         super(props);
 
         this.state = {
-            Component9Visible: true,
-            Component6Visible: true,
-            Component7Visible: true,
-            Component10Visible: true,
-            Component8Visible: true,
-            Component11Visible: true,
             Component26Visible: true,
             Component13Visible: true,
             Component25Visible: true,
+            // Här sätter det states för alla komponents så att de kan visas
         }
 
     }
@@ -92,79 +82,36 @@ export default class Screen2 extends React.Component {
             
             <View style={styles.container}>
 
-                <View style={styles.screencontainer}>
+                    <View style={styles.screencontainer}>
 
-                    <View style={styles.screencontainerInner}>
-
-                       
-                        <Component9 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component9Visible }
-                        /> 
-                        <Component26 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component26Visible }
-                        />
-                        {/* <Component6 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component6Visible }
-                        /> */}
-                        {/* <Component7 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component7Visible }
-                        /> */}
-                        
-                        <Component13 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component13Visible }
-                        />
-                        <Component25 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component25Visible }
-                        />
-                        <Component10 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component10Visible }
-                        />
-                        <Component8 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component8Visible }
-                        />
-                        <Component11 
-                            navigation={this.props.navigation}
-                            toggleComponent={ (component) => this.toggleComponent(component) }
-                            hideComponent={ (component) => this.hideComponent(component) }
-                            showComponent={ (component) => this.showComponent(component) }
-                            visible={ this.state.Component11Visible }
-                        />
+                        <View style={styles.screencontainerInner}>
+                            <Component26 
+                                navigation={this.props.navigation}
+                                toggleComponent={ (component) => this.toggleComponent(component) }
+                                hideComponent={ (component) => this.hideComponent(component) }
+                                showComponent={ (component) => this.showComponent(component) }
+                                visible={ this.state.Component26Visible }
+                            />
+                            <Component13 
+                                navigation={this.props.navigation}
+                                toggleComponent={ (component) => this.toggleComponent(component) }
+                                hideComponent={ (component) => this.hideComponent(component) }
+                                showComponent={ (component) => this.showComponent(component) }
+                                visible={ this.state.Component13Visible }
+                            />
+                            <Component25 
+                                navigation={this.props.navigation}
+                                toggleComponent={ (component) => this.toggleComponent(component) }
+                                hideComponent={ (component) => this.hideComponent(component) }
+                                showComponent={ (component) => this.showComponent(component) }
+                                visible={ this.state.Component25Visible }
+                            />     
+                            {/* här säger jag vilka komponents ska visa och hur dom ska visas */}
+                     </View>
 
                     </View>
 
-                </View>
+
 
             </View>
 
@@ -173,7 +120,7 @@ export default class Screen2 extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+// här säger jag hur screenen ska se ut
     container: {
         flex: 1,
     },
@@ -185,6 +132,6 @@ const styles = StyleSheet.create({
 	
 	screencontainerInner: {
 	    flex: 1,
-	},
+    },
 	
 });
