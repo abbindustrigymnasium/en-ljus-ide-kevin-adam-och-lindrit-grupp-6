@@ -49,7 +49,7 @@ UpdateDataToServer =() => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				Name: "AdamTest",
+				Name: "SLAYER",
         LED: (3-Ledv)
         // Här säger jag vad alla värden ska vara
 			    })

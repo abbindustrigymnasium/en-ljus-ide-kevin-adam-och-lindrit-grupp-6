@@ -49,7 +49,7 @@ export default class Component25 extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Name: "AdamTest",
+          Name: "SLAYER",
           Bright: value,
           Warm: (1024*(value*Warmpr)),
           Cold: (1024*(value*Coldpr))

@@ -70,7 +70,7 @@ export default class Component13 extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Name: "AdamTest",
+          Name: "SLAYER",
           Warmpr: Warmpr,
           Coldpr: Coldpr,
           Warm: (1024*Bright*value),
