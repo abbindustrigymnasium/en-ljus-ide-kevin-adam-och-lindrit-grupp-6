@@ -20,7 +20,7 @@ export default class Component25 extends React.Component {
   GetDataFromServer =() => {
     //Här säger jag vad den här funktionen heter
     let self= this; 
-    fetch('http://192.168.0.118:1337/lampa',{
+    fetch('http://iot.abbindustrigymnasium.se:3000/Grupp6/lampa',{
       // Här säger jag vilken ip-adress backenden som jag ska använda här
         method: 'GET'
         // Här säger jag vad jag ska göra med backenden (I det här fallet ta data)
@@ -36,11 +36,11 @@ export default class Component25 extends React.Component {
     // Här säger jag att när GetDataFromServer är klart så ska UpdateDataToServer köras
   }
 
-  UpdateDataToServer =() => {S
+  UpdateDataToServer =() => {
  //Här säger jag vad den här funktionen heter
     const {value, Bright, Warm, Cold, Warmpr, Coldpr} = this.state;
     // Här säger jag vilka varibler som används i den här funktionen
-      fetch('http://192.168.0.118:1337/lampa/',{
+      fetch('http://iot.abbindustrigymnasium.se:3000/Grupp6/lampa/',{
         // Här säger jag vilken ip-adress backenden som jag ska använda här
         method: 'PATCH',
         // Här säger jag att jag ska uppdatera värden till databasen
@@ -51,8 +51,8 @@ export default class Component25 extends React.Component {
         body: JSON.stringify({
           Name: "SLAYER",
           Bright: value,
-          Warm: (1024*(value*Warmpr)),
-          Cold: (1024*(value*Coldpr))
+          Warm: (1024*value*Warmpr),
+          Cold: (1024*value*Coldpr)
           // Här säger jag vad alla värden ska vara
             })
       }).then((response) => response.json()).then(responseJSON => {
@@ -74,7 +74,7 @@ export default class Component25 extends React.Component {
           // Här säger jag att variblen value ska bli värdet på slidern och att GetDataFromServer ska köras
         />
         <Text>
-          Colour
+        Brightness
         </Text>
           {/* Här säger jag vad som ska stå under slidern */}
       </View>

@@ -26,7 +26,7 @@ export default class Component13 extends React.Component {
   GetDataFromServer =() => {
     //Här säger jag vad den här funktionen heter
     let self= this; 
-    fetch('http//192.168.0.118:1337/lampa',{
+    fetch('http://iot.abbindustrigymnasium.se:3000/Grupp6/lampa',{
       // Här säger jag vilken ip-adress backenden som jag ska använda här
         method: 'GET'
         // Här säger jag vad jag ska göra med backenden (I det här fallet ta data)
@@ -61,7 +61,7 @@ export default class Component13 extends React.Component {
       this.setState({ Coldpr: (1-value)*2 });
       // Här säger jag att om 1-value är större än 0,5 så ska Coldpr bli 1 och om det inte är det ska Coldpr bli (1-value)*2
     }
-      fetch('http://192.168.0.118:1337/lampa/',{
+      fetch('http://iot.abbindustrigymnasium.se:3000/Grupp6/lampa/',{
         // Här säger jag vilken ip-adress backenden som jag ska använda här
         method: 'PATCH',
         // Här säger jag att jag ska uppdatera värden till databasen
@@ -96,7 +96,7 @@ export default class Component13 extends React.Component {
     // Här säger jag att variblen value ska bli värdet på slidern och att GetDataFromServer ska köras
         />
         <Text>
-          Brigtnes
+          Colour
         </Text>
         {/* Här säger jag vad som ska stå under slidern */}
       </View>

@@ -16,15 +16,14 @@ constructor(props)
 GetDataFromServer =() => {
   //Här säger jag vad den här funktionen heter
   let self= this; 
-  fetch('http://192.168.0.118:1337/lampa/AdamTest',{
+  fetch('http://iot.abbindustrigymnasium.se:3000/Grupp6/lampa/SLAYER',{
     // Här säger jag vilken ip-adress backenden som jag ska använda här
       method: 'GET'
       // Här säger jag vad jag ska göra med backenden (I det här fallet ta data)
-  }).then((response) => response.json()).then((responseJSON)=>
+  }).then((Response) => response.json()).then((responseJSON)=>
   {
     console.log(responseJSON);
-    self.setState(
-      {
+      self.setState({
           Ledv: responseJSON.LEDSwitch
            // Här säger jag att variablen Ledv ska ändras till värdet LEDSwitch från databasen
         });
@@ -40,7 +39,7 @@ UpdateDataToServer =() => {
   const { Ledv } = this.state;
   // Här säger jag att Ledv ska användas i funktionen
 
-		fetch('http://192.168.0.118:1337/lampa/',{
+		fetch('http://iot.abbindustrigymnasium.se:3000/Grupp6/lampa/',{
       // Här säger jag vilken ip-adress backenden som jag ska använda här
       method: 'PATCH',
       // Här säger jag att jag ska uppdatera värden till databasen

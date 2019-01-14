@@ -7,7 +7,7 @@ import {
 
 import Component26 from './Component26';
 import Component13 from './Component13';
-import Component25 from './Component13';
+import Component25 from './Component25';
 // Här importerarna jag alla komponenter från den här mappen som ska visas på den här screenen
 export default class Screen2 extends React.Component {
 
