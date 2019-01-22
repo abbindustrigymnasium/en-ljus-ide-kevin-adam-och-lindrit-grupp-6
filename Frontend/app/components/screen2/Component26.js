@@ -8,7 +8,7 @@ constructor(props)
 {
   super(props)
   this.state= {
-    Ledv: 3
+    Ledv: 0
      // Här säger jag att jag kommer använda variablen Ledv och att den ska vara 3
   }
 }
